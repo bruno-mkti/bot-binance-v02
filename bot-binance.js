@@ -12,6 +12,11 @@ const SYMBOL = "BTCUSDT";
 const QUANTITY = "0.001";
 const PERIOD = 14;
 
+<<<<<<< HEAD
+=======
+const API_URL = "https://testnet.binance.vision";//"https://api.binance.com"
+
+>>>>>>> aac41278f4a252a4408dcbe35a30093225607b84
 function averages(prices, period, startIndex) {
     let gains = 0, losses = 0;
 
