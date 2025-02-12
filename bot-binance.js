@@ -1,13 +1,16 @@
 const axios = require("axios");
 const crypto = require("crypto");
 
+/* Essa parte faz conexão com a Binance com a chave de acesso */
+require("dotenv").config();
+const API_URL = "https://testnet.binance.vision";//"https://api.binance.com"
+const API_KEY = process.env.API_KEY;
+const SECRET_KEY = process.env.SECRET_KEY;
+
+/* Essa parte faz a monstra a moeda que quer comprar a quantidade de criptomoeda e o período */ 
 const SYMBOL = "BTCUSDT";
 const QUANTITY = "0.001";
 const PERIOD = 14;
-
-const API_URL = "https://testnet.binance.vision";//"https://api.binance.com"
-const API_KEY = "0e4zmIMSqlTG4bxJFrzA7DgcEixskl6akRDo65zzvwc79bH93RO8fMnvLRGJQ0AG";
-const SECRET_KEY = "X0tE1YViUVz4eCuiLiW1igzqsHS8LEPSLMW3GCzGqO6ig3L5FmJ2XAab4Gya7H5K";
 
 function averages(prices, period, startIndex) {
     let gains = 0, losses = 0;
@@ -88,8 +91,8 @@ async function start() {
     console.log("RSI: " + rsi);
     console.log("Já comprei? " + isOpened);
 
-    /* Aqui fica a estratégia onde comprar e vender, 
-    nesse exemplo coloquei o rsi < 30 para comprar e rsi > 70 para vender  
+    /* Aqui fica a estratégia onde comprar e vender. 
+    Nesse exemplo coloquei o rsi < 30 para comprar e rsi > 70 para vender  
     (PODE SER ADOTADO OUTRAS ESTRATEGIAS NESSE CONJUNTO DE CÓDIGO).
     */    
 
