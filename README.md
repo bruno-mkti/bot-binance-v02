@@ -1,28 +1,7 @@
-# imersao-botdev-2025
-Projeto da Imersão BotDev 2025
+# Bot desenvolvido em JavaScript para Compra e Venda de criptomoedas
 
-## Materiais
-
-Site do Node.js: https://www.nodejs.org
-
-Site do VS Code: https://code.visualstudio.com
-
-Como instalar Node + VS Code + Git: https://www.youtube.com/watch?v=iJ-BUhcZOSY
-
-Playlist Programação para Iniciantes: https://www.youtube.com/watch?v=c9mDHLYAIu8&list=PLsGmTzb4NxK3r0_sMLyHKaYX97tPN2QPm
-
-## Como executar
-
-1. npm install
-2. ajuste os parâmetros no index.js
-3. npm start ou node index
-
-## Saiba mais
-
-Inscreva-se para receber as aulas em https://www.luiztools.com.br/bot-dev
-
-Entre no grupo de WhatsApp para os avisos, sorteios, etc https://www.luiztools.com.br/bot-dev-wp
-
-Me siga nas redes sociais para mais conteúdos: https://about.me/luiztools
-
-Receba novidades também pelo Telegram: https://t.me/luiznews
+## Como executar:
+1- Instale o Node.js
+2- Execute o comando "npm install"
+3- Ajuste os parâmetros no "index.js"
+4- Execute o comando "npm start" ou "node index"
