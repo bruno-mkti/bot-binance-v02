@@ -84,12 +84,14 @@ async function start() {
     const lastPrice = parseFloat(candle[4]);
 
     console.clear();
-    console.log("Preço Atual: " + lastPrice);
+    console.log("Preço Atual BTC: " + lastPrice);
 
     const prices = data.map(k => parseFloat(k[4]));
     const rsi = RSI(prices, PERIOD);
     console.log("RSI: " + rsi);
-    console.log("Compra: " + isOpened);
+    console.log("RSI < 30 indica que a criptomoeda está em baixa e é uma boa hora de comprar");
+    console.log ("RSI > 70 indica que a criptomoeda está em alta e é uma boa hora de vender");
+    console.log("Já comprou: " + isOpened);
 
     /* Aqui fica a estratégia onde comprar e vender. 
     Nesse exemplo coloquei o rsi < 30 para comprar e rsi > 70 para vender  
@@ -107,7 +109,7 @@ async function start() {
         isOpened = false;
     }
     else
-        console.log("Aguardando compra (RSI < 30 indica que a criptomoeda está em baixa e é uma boa hora de comprar, RSI > 70 indica que a criptomoeda está em alta e é uma boa hora de vender)");
+        console.log("Aguardando compra");
 }
 
 setInterval(start, 3000);
