@@ -28,7 +28,7 @@
     <script>
         async function fetchData() {
             try {
-                const response = await fetch("http://localhost:3000/data");
+                const response = await fetch("https://bot-binance-production.up.railway.app/data");
                 const data = await response.json();
                 document.getElementById("price").innerText = data.price.toFixed(2);
                 document.getElementById("rsi").innerText = data.rsi.toFixed(2);
