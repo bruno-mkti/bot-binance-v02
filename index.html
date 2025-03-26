@@ -16,35 +16,26 @@
         <h1>Dashboard BTC/RSI</h1>
         <p class="info">Preço Atual: <span id="price">--</span> USDT</p>
         <p class="info">RSI: <span id="rsi">--</span></p>
-    </div>
-
-    <div>
-        <p>RSI < 30 Hora de comprar</p>
-        <p>RSI > 70 Hora de vender</p>
         <p class="info">Compras: <span id="buyCount">0</span></p>
         <p class="info">Vendas: <span id="sellCount">0</span></p>
         <p class="info">Lucro: <span id="profit">0</span> USDT</p>
-    </div>  
-      
+    </div>
+    <div>
+        <p>RSI < 30 = Compra</p>
+        <p>RSI > 70 = Venda</p>
+    </div>
+    
     <script>
-       const API_URL = "https://localhost:3000/data"; // Substitua com seu IP real
-
         async function fetchData() {
             try {
-                const response = await fetch(API_URL);
+                const response = await fetch("http://localhost:3000/data");
                 const data = await response.json();
-
                 document.getElementById("price").innerText = data.price.toFixed(2);
                 document.getElementById("rsi").innerText = data.rsi.toFixed(2);
-                document.getElementById("buyCount").innerText = data.buyCount;
-                document.getElementById("sellCount").innerText = data.sellCount;
-                document.getElementById("profit").innerText = data.profit.toFixed(2);
             } catch (error) {
                 console.error("Erro ao obter dados:", error);
             }
         }
-
-        // Atualiza os dados a cada 3 segundos
         setInterval(fetchData, 3000);
         fetchData();
     </script>
