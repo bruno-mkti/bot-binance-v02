@@ -24,24 +24,29 @@
         <p class="info">Compras: <span id="buyCount">0</span></p>
         <p class="info">Vendas: <span id="sellCount">0</span></p>
         <p class="info">Lucro: <span id="profit">0</span> USDT</p>
-    </div>    
+    </div>  
+      
     <script>
-        async function fetchData() {
-            try {
-                const response = await fetch("https://bruno-mkti.github.io/bot-binance/");
-                const data = await response.json();
-                document.getElementById("price").innerText = data.price.toFixed(2);
-                document.getElementById("rsi").innerText = data.rsi.toFixed(2);
-            } catch (error) {
-                console.error("Erro ao obter dados:", error);
-            }
-        }
-        setInterval(fetchData, 3000);
-        fetchData();
+       const API_URL = "http://15.225.53.0:3000/data"; // Substitua com seu IP real
 
+async function fetchData() {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        document.getElementById("price").innerText = data.price.toFixed(2);
+        document.getElementById("rsi").innerText = data.rsi.toFixed(2);
         document.getElementById("buyCount").innerText = data.buyCount;
         document.getElementById("sellCount").innerText = data.sellCount;
         document.getElementById("profit").innerText = data.profit.toFixed(2);
+    } catch (error) {
+        console.error("Erro ao obter dados:", error);
+    }
+}
+
+// Atualiza os dados a cada 3 segundos
+setInterval(fetchData, 3000);
+fetchData();
     </script>
 </body>
 </html>
