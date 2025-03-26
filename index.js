@@ -70,11 +70,11 @@ async function start() {
         console.log(`📊 Compras: ${buyCount}, Vendas: ${sellCount}, Lucro: ${profit.toFixed(2)} USDT`);
 
         if (rsi < 30 && isOpened === false) {
-            console.log("✅ RSI abaixo de 30! Comprando...");
+            console.log("✅ RSI abaixo de 40! Comprando...");
             isOpened = true;
             newOrder("BUY", lastPrice);
         } else if (rsi > 70 && isOpened === true) {
-            console.log("🔴 RSI acima de 70! Vendendo...");
+            console.log("🔴 RSI acima de 60! Vendendo...");
             newOrder("SELL", lastPrice);
             isOpened = false;
         } else {
