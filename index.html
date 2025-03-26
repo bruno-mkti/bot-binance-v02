@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard RSI</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        .container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        h1 { color: #333; }
+        .info { font-size: 20px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard BTC/RSI</h1>
+        <p class="info">Preço Atual: <span id="price">--</span> USDT</p>
+        <p class="info">RSI: <span id="rsi">--</span></p>
+    </div>
+
+    <div>
+        <p>RSI < 30 Hora de comprar</p>
+        <p>RSI > 70 Hora de vender</p>
+        <p class="info">Compras: <span id="buyCount">0</span></p>
+        <p class="info">Vendas: <span id="sellCount">0</span></p>
+        <p class="info">Lucro: <span id="profit">0</span> USDT</p>
+    </div>    
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch("http://localhost:3000/data");
+                const data = await response.json();
+                document.getElementById("price").innerText = data.price.toFixed(2);
+                document.getElementById("rsi").innerText = data.rsi.toFixed(2);
+            } catch (error) {
+                console.error("Erro ao obter dados:", error);
+            }
+        }
+        setInterval(fetchData, 3000);
+        fetchData();
+
+        document.getElementById("buyCount").innerText = data.buyCount;
+        document.getElementById("sellCount").innerText = data.sellCount;
+        document.getElementById("profit").innerText = data.profit.toFixed(2);
+    </script>
+</body>
+</html>

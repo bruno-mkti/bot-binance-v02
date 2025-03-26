@@ -1,117 +1,115 @@
+const express = require("express");
 const axios = require("axios");
-const crypto = require("crypto");
+const cors = require("cors");
 
-/* Essa parte faz conexão com a Binance com a chave de acesso */
 require("dotenv").config();
-const API_URL = "https://testnet.binance.vision";//"https://api.binance.com"
-const API_KEY = process.env.API_KEY;
-const SECRET_KEY = process.env.SECRET_KEY;
+const app = express();
+const PORT = 3000;
 
-/* Essa parte faz a monstra a moeda que quer comprar a quantidade de criptomoeda e o período */ 
+app.use(cors());
+
+const API_URL = "https://testnet.binance.vision";
 const SYMBOL = "BTCUSDT";
 const QUANTITY = "0.001";
 const PERIOD = 14;
 
+let isOpened = false;
+let buyCount = 0;
+let sellCount = 0;
+let profit = 0;
+let lastBuyPrice = 0;
+
 function averages(prices, period, startIndex) {
     let gains = 0, losses = 0;
-
     for (let i = 0; i < period && (i + startIndex) < prices.length; i++) {
         const diff = prices[i + startIndex] - prices[i + startIndex - 1];
-        if (diff >= 0)
-            gains += diff;
-        else
-            losses += Math.abs(diff);
+        if (diff >= 0) gains += diff;
+        else losses += Math.abs(diff);
     }
-
-    let avgGains = gains / period;
-    let avgLosses = losses / period;
-    return { avgGains, avgLosses };
+    return { avgGains: gains / period, avgLosses: losses / period };
 }
 
-function RSI(prices, period){
+function RSI(prices, period) {
     let avgGains = 0, avgLosses = 0;
-
-    for(let i=1; i < prices.length; i++){
+    for (let i = 1; i < prices.length; i++) {
         let newAverages = averages(prices, period, i);
-
-        if(i === 1){
+        if (i === 1) {
             avgGains = newAverages.avgGains;
             avgLosses = newAverages.avgLosses;
             continue;
         }
-
-        avgGains = (avgGains * (period -1) + newAverages.avgGains) / period;
-        avgLosses = (avgLosses * (period -1) + newAverages.avgLosses) / period;
+        avgGains = (avgGains * (period - 1) + newAverages.avgGains) / period;
+        avgLosses = (avgLosses * (period - 1) + newAverages.avgLosses) / period;
     }
-
     const rs = avgGains / avgLosses;
     return 100 - (100 / (1 + rs));
 }
 
-async function newOrder(symbol, quantity, side){
-    const order = { symbol, quantity, side };
-    order.type = "MARKET";
-    order.timestamp = Date.now();
-
-    const signature = crypto
-        .createHmac("sha256", SECRET_KEY)
-        .update(new URLSearchParams(order).toString())
-        .digest("hex");
-
-    order.signature = signature;
-
-    try{
-        const {data} = await axios.post(
-            API_URL + "/api/v3/order", 
-            new URLSearchParams(order).toString(), 
-            {
-                headers: { "X-MBX-APIKEY": API_KEY }
-            }
-        )
-
-        console.log(data);
-    }
-    catch(err){
-        console.error(err.response.data);
+async function newOrder(side, price) {
+    console.log(`Ordem executada: ${side} ${QUANTITY} de ${SYMBOL} a ${price}`);
+    
+    if (side === "BUY") {
+        buyCount++;
+        lastBuyPrice = price;
+    } else if (side === "SELL") {
+        sellCount++;
+        profit += (price - lastBuyPrice) * parseFloat(QUANTITY);
     }
 }
 
-let isOpened = false;
-
 async function start() {
-    const { data } = await axios.get(API_URL + "/api/v3/klines?limit=100&interval=15m&symbol=" + SYMBOL);
-    const candle = data[data.length - 1];
-    const lastPrice = parseFloat(candle[4]);
+    try {
+        const { data } = await axios.get(`${API_URL}/api/v3/klines?limit=100&interval=15m&symbol=${SYMBOL}`);
+        const lastPrice = parseFloat(data[data.length - 1][4]);
+        const prices = data.map(k => parseFloat(k[4]));
+        const rsi = RSI(prices, PERIOD);
 
-    console.clear();
-    console.log("Preço Atual BTC: " + lastPrice);
+        console.clear();
+        console.log(`📌 Preço Atual BTC: ${lastPrice}`);
+        console.log(`📉 RSI: ${rsi}`);
+        console.log(`📊 Compras: ${buyCount}, Vendas: ${sellCount}, Lucro: ${profit.toFixed(2)} USDT`);
 
-    const prices = data.map(k => parseFloat(k[4]));
-    const rsi = RSI(prices, PERIOD);
-    console.log("RSI: " + rsi);
-    console.log("RSI < 30 indica que a criptomoeda está em baixa e é uma boa hora de comprar");
-    console.log ("RSI > 70 indica que a criptomoeda está em alta e é uma boa hora de vender");
-    console.log("Já comprou: " + isOpened);
-
-    /* Aqui fica a estratégia onde comprar e vender. 
-    Nesse exemplo coloquei o rsi < 30 para comprar e rsi > 70 para vender  
-    (PODE SER ADOTADO OUTRAS ESTRATEGIAS NESSE CONJUNTO DE CÓDIGO).
-    */    
-
-    if (rsi < 30 && isOpened === false) {
-        console.log("sobrevendido, hora de comprar");
-        isOpened = true;
-        newOrder(SYMBOL, QUANTITY, "BUY");
+        if (rsi < 30 && isOpened === false) {
+            console.log("✅ RSI abaixo de 30! Comprando...");
+            isOpened = true;
+            newOrder("BUY", lastPrice);
+        } else if (rsi > 70 && isOpened === true) {
+            console.log("🔴 RSI acima de 70! Vendendo...");
+            newOrder("SELL", lastPrice);
+            isOpened = false;
+        } else {
+            console.log("⌛ Aguardando...");
+        }
+    } catch (error) {
+        console.error("Erro ao obter dados da Binance:", error.message);
     }
-    else if (rsi > 70 && isOpened === true) {
-        console.log("sobrecomprado, hora de vender");
-        newOrder(SYMBOL, QUANTITY, "SELL");
-        isOpened = false;
-    }
-    else
-        console.log("Aguardando compra");
 }
 
 setInterval(start, 3000);
+
+// API para enviar dados ao frontend
+app.get("/data", async (req, res) => {
+    try {
+        const { data } = await axios.get(`${API_URL}/api/v3/klines?limit=100&interval=15m&symbol=${SYMBOL}`);
+        const lastPrice = parseFloat(data[data.length - 1][4]);
+        const prices = data.map(k => parseFloat(k[4]));
+        const rsi = RSI(prices, PERIOD);
+
+        res.json({ 
+            price: lastPrice, 
+            rsi, 
+            buyCount, 
+            sellCount, 
+            profit 
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao obter dados" });
+    }
+});
+
+// Iniciar servidor Express
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+});
 
 start();
