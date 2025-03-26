@@ -1,10 +1,14 @@
 # Bot desenvolvido em JavaScript para Compra e Venda de criptomoedas
 
 ## Como executar:
-1- Instale o Node.js
+1- Instalar o Node.js
 
-2- Execute o comando "npm install"
+2- Executar o comando "npm install"
 
-3- Ajuste os parâmetros no "index.js"
+3- Ajustar parâmetros no "index.js"
 
-4- Execute o comando "npm start" ou "node index"
+4- criar um arquivo .env e colocar os chaves key da Binance tester
+
+5- Executar com comando "npm start" ou "node index"
+
+Link do dashboard: https://bruno-mkti.github.io/bot-binance/
