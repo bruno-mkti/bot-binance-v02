@@ -102,6 +102,7 @@ app.get("/data", async (req, res) => {
             sellCount, 
             profit 
         });
+
     } catch (error) {
         res.status(500).json({ error: "Erro ao obter dados" });
     }

@@ -3,8 +3,8 @@ const crypto = require("crypto");
 
 require("dotenv").config();
 const API_URL = "https://testnet.binance.vision";
-const API_KEY = process.env.API_KEY;
-const SECRET_KEY = process.env.SECRET_KEY;
+const API_KEY = "ab5d5fbfab29be05310436d99874191aa19d2b0dffde78e2a3d52b8aa3b8b8a0";
+const SECRET_KEY = "883f6b4d72d14b5a3234dcd87a6794d03b63ce67be9913dc876b5f5dff2c99d7";
 
 const SYMBOL = "BTCUSDT";
 const QUANTITY = "0.001";
