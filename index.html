@@ -29,14 +29,26 @@
         async function fetchData() {
             try {
                 const response = await fetch("https://bot-binance-production.up.railway.app/data");
-                const data = await response.json();
-                document.getElementById("price").innerText = data.price.toFixed(2);
-                document.getElementById("rsi").innerText = data.rsi.toFixed(2);
+                    if (!response.ok) {
+                        throw new Error(`Erro HTTP! Status: ${response.status}`);
+            }
+            const data = await response.json();
+        
+            document.getElementById("price").innerText = data.price.toFixed(2);
+            document.getElementById("rsi").innerText = data.rsi.toFixed(2);
+            document.getElementById("buyCount").innerText = data.buyCount || 0;
+            document.getElementById("sellCount").innerText = data.sellCount || 0;
+            document.getElementById("profit").innerText = data.profit ? data.profit.toFixed(2) : "0.00";
+
             } catch (error) {
-                console.error("Erro ao obter dados:", error);
+                console.error("Erro ao buscar dados:", error);
             }
         }
-        setInterval(fetchData, 3000);
+
+        // Atualiza os dados a cada 5 segundos
+        setInterval(fetchData, 5000);
+
+        // Chama a função ao carregar a página
         fetchData();
     </script>
 </body>
