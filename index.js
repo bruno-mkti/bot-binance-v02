@@ -88,22 +88,16 @@ async function start() {
 setInterval(start, 3000);
 
 // API para enviar dados ao frontend
-app.get("/data", async (req, res) => {
-    try {
-        const { data } = await axios.get(`${API_URL}/api/v3/klines?limit=100&interval=15m&symbol=${SYMBOL}`);
-        const lastPrice = parseFloat(data[data.length - 1][4]);
-        const prices = data.map(k => parseFloat(k[4]));
-        const rsi = RSI(prices, PERIOD);
-
-        res.json({ 
-            price: lastPrice, 
-            rsi, 
-            buyCount, 
-            sellCount, 
-            profit 
-        });
-    } catch (error) {
-        res.status(500).json({ error: "Erro ao obter dados" });
+fetch("https://bot-binance-production.up.railway.app/data")
+  .then(response => response.json())
+  .then(data => {
+      document.getElementById("price").innerText = data.price.toFixed(2);
+      document.getElementById("rsi").innerText = data.rsi.toFixed(2);
+      document.getElementById("buyCount").innerText = data.buyCount;
+      document.getElementById("sellCount").innerText = data.sellCount;
+      document.getElementById("profit").innerText = data.profit.toFixed(2);
+  })
+  .catch(error => console.error("Erro ao buscar dados:", error));
     }
 });
 
