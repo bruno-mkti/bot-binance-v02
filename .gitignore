@@ -1,2 +1,4 @@
 node_modules
 .env
+saldo.py
+trades.py
