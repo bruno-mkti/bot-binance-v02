@@ -1,55 +1,46 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard USDT</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        .container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
-        h1 { color: #333; }
-        .info { font-size: 20px; margin-top: 10px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard do Bot de Trade</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <h1>Dashboard USDT</h1>
-        <p class="info">Preço Atual: <span id="price">--</span> USDT</p>
-        <p class="info">RSI: <span id="rsi">--</span></p>
+  <h1>📈 Dashboard do Bot de Trader</h1>
+
+  <div class="grid-container">
+    <div class="card"><h2>📊 Gráfico de Preço</h2><canvas id="priceChart"></canvas></div>
+    <div class="card"><h2>📉 RSI</h2><canvas id="rsiChart"></canvas></div>
+    <div class="card"><h2>📈 MACD</h2><canvas id="macdChart"></canvas></div>
+    <div class="card">
+      <h2>📁 Informações Gerais</h2>
+      <div id="info">
+        <p>$ Preço Atual: --</p>
+        <p>📊 RSI: --</p>
+        <p>📈 MACD: -- / Signal: --</p>
+        <p>📉 BB: --</p>
+        <p>⚡ ADX: --</p>
+        <p>📘 EMAs: EMA9: -- / EMA21: --</p>
+        <p>💰 Saldo Atual: --</p>
+        <p>✅ Compras: --</p>
+        <p>🔴 Vendas: --</p>
+        <p>🤑 Lucro: -- USDT</p>
+      </div>
     </div>
-    <br>
-    <div class="container">
-        <p class="info">Compras: <span id="buyCount"></span></p>
-        <p class="info">Vendas: <span id="sellCount"></span></p>
-        <p class="info">Lucro: <span id="profit"></span> USDT</p>
-        <p>RSI < 30 = Compra</p>
-        <p>RSI > 70 = Venda</p>
-    </div>
-    <script>
-        async function fetchData() {
-            try {
-                const response = await fetch("https://bot-binance-production.up.railway.app/data");
-                    if (!response.ok) {
-                        throw new Error(`Erro HTTP! Status: ${response.status}`);
-            }
-            const data = await response.json();
-        
-            document.getElementById("price").innerText = data.price.toFixed(2);
-            document.getElementById("rsi").innerText = data.rsi.toFixed(2);
-            document.getElementById("buyCount").innerText = data.buyCount || 0;
-            document.getElementById("sellCount").innerText = data.sellCount || 0;
-            document.getElementById("profit").innerText = data.profit ? data.profit.toFixed(2) : "0.00";
+  </div>
 
-            } catch (error) {
-                console.error("Erro ao buscar dados:", error);
-            }
-        }
+  <div class="history">
+    <h2>📜 Histórico de Ordens</h2>
+    <table>
+      <thead>
+        <tr><th>Tipo</th><th>Preço</th><th>Horário</th><th>Saldo Atual</th></tr>
+      </thead>
+      <tbody id="orderHistory"></tbody>
+    </table>
+  </div>
 
-        // Atualiza os dados a cada 5 segundos
-        setInterval(fetchData, 5000);
-
-        // Chama a função ao carregar a página
-        fetchData();
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
