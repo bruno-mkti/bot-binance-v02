@@ -7,9 +7,7 @@
 
 3- Ajustar parâmetros no "index.js"
 
-4- Criar um arquivo .env e colocar os chaves key da Binance tester
-API_KEY = "SEU_API_KEY"; 
-SECRET_KEY = "SEU_SECRET_KEY"
+4- criar um arquivo .env e colocar os chaves key da Binance tester
 
 5- Executar com comando "npm start" ou "node index"
 
