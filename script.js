@@ -26,6 +26,7 @@ const macdChart = new Chart(macdCtx, {
   options: { scales: { y: { beginAtZero: false } } }
 });
 
+let hasBuy = false;
 function atualizarDashboard(data) {
   const timeLabel = new Date().toLocaleTimeString();
   const maxPoints = 20;
@@ -61,7 +62,7 @@ function atualizarDashboard(data) {
     <p>💰 Saldo Atual: ${data.balance.toFixed(2)} USDT</p>
     <p>✅ Compras: ${data.buyCount}</p>
     <p>🔴 Vendas: ${data.sellCount}</p>
-    <p>🪙 Lucro: ${data.profit.toFixed(2)} USDT</p>
+    <p>🤑 Lucro: ${data.profit.toFixed(2)} USDT</p>
   `;
 
   // Histórico
@@ -75,23 +76,51 @@ function atualizarDashboard(data) {
   document.getElementById("orderHistory").appendChild(row);
 }
 
-// Simulação com dados falsos
-setInterval(() => {
-  const now = Date.now();
+setInterval(async () => {
+  const res = await fetch('http://localhost:3000/data');
+  const data = await res.json();
+
+  const d = data.lastData;
+
   atualizarDashboard({
-    type: Math.random() > 0.5 ? "buy" : "sell",
-    price: 79000 + Math.random() * 500,
-    rsi: Math.random() * 100,
-    macd: Math.random() * 500 - 250,
-    signal: Math.random() * 500 - 250,
-    bb: { lower: 79000, upper: 80200 },
-    adx: Math.random() * 100,
-    ema9: 79300 + Math.random() * 100,
-    ema21: 79500 + Math.random() * 100,
-    balance: 1000 + Math.random() * 50,
-    buyCount: Math.floor(Math.random() * 10),
-    sellCount: Math.floor(Math.random() * 10),
-    profit: Math.random() * 100,
-    timestamp: now
+    type: data.position === "open" ? "sell" : "buy",
+    price: d.price,
+    rsi: d.rsi,
+    macd: d.macd,
+    signal: d.signal,
+    bb: d.bb,
+    adx: d.adx,
+    ema9: d.ema9,
+    ema21: d.ema21,
+    balance: data.balance,
+    buyCount: data.buyCount,
+    sellCount: data.sellCount,
+    profit: data.profit,
+    timestamp: d.timestamp
   });
-}, 3000);
+
+  let hasBuy = false;
+
+  orders.slice().reverse().forEach((order) => {
+    if (order.type === "buy") {
+      hasBuy = true;
+    }
+
+    if (order.type === "sell" && !hasBuy) {
+      return; // ignora venda sem compra anterior
+    }
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${order.type === "open" ? "sell" : "buy"}</td>
+      <td>${order.price.toFixed(2)}</td>
+      <td>${new Date(order.timestamp).toLocaleTimeString()}</td>
+      <td>${order.balance.toFixed(2)}</td>
+    `;
+    historyTable.appendChild(row);
+
+    if (order.type === "sell") {
+      hasBuy = false; // fecha a posição
+    }
+  });
+}, 5000);
