@@ -10,7 +10,7 @@ app.use(cors());
 
 const API_URL = "https://testnet.binance.vision";
 const SYMBOL = "BTCUSDT";
-const QUANTITY = "0.001";
+const QUANTITY = "0.00020563";
 const PERIOD = 14;
 
 let isOpened = false;
@@ -69,12 +69,12 @@ async function start() {
         console.log(`📉 RSI: ${rsi}`);
         console.log(`📊 Compras: ${buyCount}, Vendas: ${sellCount}, Lucro: ${profit.toFixed(2)} USDT`);
 
-        if (rsi < 40 && isOpened === false) {
-            console.log("✅ RSI abaixo de 40! Comprando...");
+        if (rsi < 30 && isOpened === false) {
+            console.log("✅ RSI abaixo de 30! Comprando...");
             isOpened = true;
             newOrder("BUY", lastPrice);
-        } else if (rsi > 60 && isOpened === true) {
-            console.log("🔴 RSI acima de 60! Vendendo...");
+        } else if (rsi > 70 && isOpened === true) {
+            console.log("🔴 RSI acima de 70! Vendendo...");
             newOrder("SELL", lastPrice);
             isOpened = false;
         } else {
