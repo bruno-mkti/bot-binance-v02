@@ -11,4 +11,4 @@
 
 5- Executar com comando "npm start" ou "node index"
 
-Link do dashboard: https://bruno-mkti.github.io/bot-binance/
+Link do dashboard: https://bruno-mkti.github.io/bot-binance-parameters/
