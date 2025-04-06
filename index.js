@@ -10,7 +10,7 @@ app.use(cors());
 
 const API_URL = "https://testnet.binance.vision";
 const SYMBOL = "BTCUSDT";
-const QUANTITY = "0.00020563";
+const QUANTITY = "0.00020563"; // Aproximadamente 100,00
 const PERIOD = 14;
 
 let isOpened = false;
