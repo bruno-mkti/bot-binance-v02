@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard do Robô de Cripto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1, h2 {
+      color: #00ff88;
+    }
+    #info {
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+      max-width: 500px;
+      width: 100%;
+    }
+    p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    table {
+      background: #1e1e1e;
+      color: #fff;
+      border-collapse: collapse;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 700px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #444;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 Dashboard do Robô</h1>
+  <div id="info">
+    <p id="preco"></p>
+    <p id="rsi"></p>
+    <p id="compras"></p>
+    <p id="vendas"></p>
+    <p id="investimento"></p>
+    <p id="lucroBruto"></p>
+    <p id="lucroLiquido"></p>
+    <p>📊 Rentabilidade: <span id="lucroPercentualValor"></span></p>
+  </div>
+
+  <h2>📜 Histórico de Operações</h2>
+  <table id="historico" border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Preço</th>
+        <th>Horário</th>
+        <th>Saldo USDT</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="script.js"></script>
+</body>
+</html>
