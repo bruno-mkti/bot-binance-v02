@@ -8,7 +8,7 @@ async function fetchData() {
     document.getElementById("rsi").textContent = `📉 RSI: ${data.rsi.toFixed(2)}`;
     document.getElementById("compras").textContent = `✅ Compras: ${data.buyCount}`;
     document.getElementById("vendas").textContent = `🔴 Vendas: ${data.sellCount}`;
-    document.getElementById("investimento").textContent = `💼 Investimento total: ${data.investimento} USDT`;
+    document.getElementById("investimento").textContent = `💼 Investimento total: 0.00020563 USDT ≈ R$100 `;
     document.getElementById("lucroBruto").textContent = `💰 Lucro bruto: ${data.profit} USDT`;
     document.getElementById("lucroLiquido").textContent = `📈 Lucro líquido (após taxas): ${data.profitAfterFees} USDT (≈ R$${data.profitBRL})`;
 
