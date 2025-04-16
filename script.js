@@ -1,7 +1,7 @@
 
 async function fetchData() {
   try {
-    const response = await fetch("bot-binance-v02-production.up.railway.app/data");
+    const response = await fetch("https://bot-binance-v02-production.up.railway.app/data");
     const data = await response.json();
 
     document.getElementById("preco").textContent = `📌 Preço atual: ${data.price} USDT`;
