@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -49,6 +48,10 @@
   <div id="info">
     <p id="preco"></p>
     <p id="rsi"></p>
+    <p id="macd"></p>
+    <p id="bb"></p>
+    <p id="adx"></p>
+    <p id="ema"></p>
     <p id="compras"></p>
     <p id="vendas"></p>
     <p id="investimento"></p>
@@ -70,6 +73,73 @@
     <tbody></tbody>
   </table>
 
-  <script src="script.js"></script>
+  <script>
+    async function fetchData() {
+      try {
+        const response = await fetch("https://bot-binance-v02-production-9f99.up.railway.app/data"); // Se tiver rodando local modifique a URL para "http://localhost:3000/data" ou no servidor "http://ip-do-servidor:3000/data"
+        const data = await response.json();
+    
+        console.log("Últimos dados:", data.lastData);
+    
+        const last = data.lastData;
+    
+        // Indicadores principais
+        document.getElementById("preco").textContent = `📌 Preço atual: ${parseFloat(last.price).toFixed(2)} USDT`;
+        document.getElementById("rsi").textContent = `📉 RSI: ${parseFloat(last.rsi).toFixed(2)}`;
+        document.getElementById("macd").textContent = `📊 MACD: ${last.macd.toFixed(2)} / Signal: ${last.signal.toFixed(2)}`;
+        document.getElementById("bb").textContent = `📈 Bandas de Bollinger: [${last.bb.lower.toFixed(2)} - ${last.bb.upper.toFixed(2)}]`;
+        document.getElementById("adx").textContent = `📏 ADX: ${last.adx.toFixed(2)}`;
+        document.getElementById("ema").textContent = `📐 EMA9: ${last.ema9.toFixed(2)} / EMA21: ${last.ema21.toFixed(2)}`;
+    
+        // Outros dados do robô
+        document.getElementById("compras").textContent = `✅ Compras: ${data.buyCount}`;
+        document.getElementById("vendas").textContent = `🔴 Vendas: ${data.sellCount}`;
+        document.getElementById("investimento").textContent = `💼 Investimento: 0.00020563 USDT ≈ R$ 100`;
+        document.getElementById("lucroBruto").textContent = `💰 Lucro bruto: ${parseFloat(data.profit)} USDT`;
+        document.getElementById("lucroLiquido").textContent = `📈 Lucro líquido (após taxas): ${parseFloat(data.profitAfterFees)} USDT (≈ R$${parseFloat(data.profitBRL ?? 0).toFixed(2)})`;
+    
+        // Rentabilidade
+        const lucroPercentual = parseFloat(data.lucroPercentual ?? 0);
+        const lucroSpan = document.getElementById("lucroPercentualValor");
+        lucroSpan.textContent = `${lucroPercentual.toFixed(2)}%`;
+        lucroSpan.style.color = lucroPercentual > 0 ? "#00ff88" : (lucroPercentual < 0 ? "#ff4d4d" : "#cccccc");
+    
+        // Histórico de operações
+        const historicoTable = document.querySelector("#historico tbody");
+        historicoTable.innerHTML = "";
+    
+        if (data.historico && Array.isArray(data.historico)) {
+          data.historico.forEach((trade) => {
+            const row = document.createElement("tr");
+    
+            const tipoCell = document.createElement("td");
+            tipoCell.textContent = trade.tipo;
+            tipoCell.style.color = trade.tipo === "VENDA" ? "#ff4d4d" : "#00ff88";
+    
+            const precoCell = document.createElement("td");
+            precoCell.textContent = parseFloat(trade.preco).toFixed(2);
+    
+            const horarioCell = document.createElement("td");
+            horarioCell.textContent = trade.horario;
+    
+            const saldoCell = document.createElement("td");
+            saldoCell.textContent = parseFloat(trade.saldo).toFixed(2);
+    
+            row.appendChild(tipoCell);
+            row.appendChild(precoCell);
+            row.appendChild(horarioCell);
+            row.appendChild(saldoCell);
+            historicoTable.appendChild(row);
+          });
+        }
+    
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    }
+    
+    setInterval(fetchData, 5000);
+    fetchData();    
+  </script>
 </body>
 </html>
