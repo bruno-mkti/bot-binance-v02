@@ -58,6 +58,7 @@
     <p id="lucroBruto"></p>
     <p id="lucroLiquido"></p>
     <p>📊 Rentabilidade: <span id="lucroPercentualValor"></span></p>
+    <p id="saldoAtual"></p> <!-- Novo Parágrafo para o Saldo Atual -->
   </div>
 
   <h2>📜 Histórico de Operações</h2>
@@ -76,7 +77,7 @@
   <script>
     async function fetchData() {
       try {
-        const response = await fetch("http://localhost:3000/data");
+        const response = await fetch("http://localhost:3000/data"); // Servidor Google Cloud "http://34.39.151.145:3000/data"
         const data = await response.json();
     
         console.log("Últimos dados:", data.lastData);
@@ -95,7 +96,7 @@
         document.getElementById("compras").textContent = `✅ Compras: ${data.buyCount}`;
         document.getElementById("vendas").textContent = `🔴 Vendas: ${data.sellCount}`;
         document.getElementById("investimento").textContent = `💼 Investimento: 0.00020563 USDT ≈ R$ 100`;
-        document.getElementById("lucroBruto").textContent = `💰 Lucro bruto: ${parseFloat(data.profit)} USDT`;
+        document.getElementById("lucroBruto").textContent = `🤑 Lucro bruto: ${parseFloat(data.profit)} USDT`;
         document.getElementById("lucroLiquido").textContent = `📈 Lucro líquido (após taxas): ${parseFloat(data.profitAfterFees)} USDT (≈ R$${parseFloat(data.profitBRL ?? 0).toFixed(2)})`;
     
         // Rentabilidade
@@ -103,6 +104,9 @@
         const lucroSpan = document.getElementById("lucroPercentualValor");
         lucroSpan.textContent = `${lucroPercentual.toFixed(2)}%`;
         lucroSpan.style.color = lucroPercentual > 0 ? "#00ff88" : (lucroPercentual < 0 ? "#ff4d4d" : "#cccccc");
+    
+        // Saldo Atual
+        document.getElementById("saldoAtual").textContent = `💰 Saldo atual: ${parseFloat(data.balance).toFixed(2)} USDT`;
     
         // Histórico de operações
         const historicoTable = document.querySelector("#historico tbody");
