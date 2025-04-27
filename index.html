@@ -41,24 +41,41 @@
       border: 1px solid #444;
       text-align: center;
     }
+    #parametros {
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 30px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+    }
+    #parametros h3 {
+      color: #00ff88;
+    }
   </style>
 </head>
 <body>
   <h1>📊 Dashboard do Robô</h1>
-  <div id="info">
+  <div id="parametros">
+    <h3>Parâmetros</h3>
+    <p id="rsi">📉 RSI: 41.60</p>
+    <p id="macd">📊 MACD: 1.53 / Signal: 6.06</p>
+    <p id="bb">📈 Bandas de Bollinger: [93862.84 - 93937.17]</p>
+    <p id="adx">📏 ADX: 18.13</p>
+    <p id="ema">📐 EMA9: 93888.41 / EMA21: 93889.45</p>
+  </div>
+
+  <div id="parametros">
+    <h3>Resultados</h3>
     <p id="preco"></p>
-    <p id="rsi"></p>
-    <p id="macd"></p>
-    <p id="bb"></p>
-    <p id="adx"></p>
-    <p id="ema"></p>
     <p id="compras"></p>
     <p id="vendas"></p>
     <p id="investimento"></p>
     <p id="lucroBruto"></p>
     <p id="lucroLiquido"></p>
     <p>📊 Rentabilidade: <span id="lucroPercentualValor"></span></p>
-    <p id="saldoAtual"></p> <!-- Novo Parágrafo para o Saldo Atual -->
+    <p id="saldoAtual"></p>
   </div>
 
   <h2>📜 Histórico de Operações</h2>
@@ -86,11 +103,6 @@
     
         // Indicadores principais
         document.getElementById("preco").textContent = `📌 Preço atual: ${parseFloat(last.price).toFixed(2)} USDT`;
-        document.getElementById("rsi").textContent = `📉 RSI: ${parseFloat(last.rsi).toFixed(2)}`;
-        document.getElementById("macd").textContent = `📊 MACD: ${last.macd.toFixed(2)} / Signal: ${last.signal.toFixed(2)}`;
-        document.getElementById("bb").textContent = `📈 Bandas de Bollinger: [${last.bb.lower.toFixed(2)} - ${last.bb.upper.toFixed(2)}]`;
-        document.getElementById("adx").textContent = `📏 ADX: ${last.adx.toFixed(2)}`;
-        document.getElementById("ema").textContent = `📐 EMA9: ${last.ema9.toFixed(2)} / EMA21: ${last.ema21.toFixed(2)}`;
     
         // Outros dados do robô
         document.getElementById("compras").textContent = `✅ Compras: ${data.buyCount}`;
@@ -107,6 +119,13 @@
     
         // Saldo Atual
         document.getElementById("saldoAtual").textContent = `💰 Saldo atual: ${parseFloat(data.balance).toFixed(2)} USDT`;
+
+        // Parâmetros
+        document.getElementById("rsi").textContent = `📉 RSI: ${parseFloat(last.rsi).toFixed(2)}`;
+        document.getElementById("macd").textContent = `📊 MACD: ${last.macd.toFixed(2)} / Signal: ${last.signal.toFixed(2)}`;
+        document.getElementById("bb").textContent = `📈 Bandas de Bollinger: [${last.bb.lower.toFixed(2)} - ${last.bb.upper.toFixed(2)}]`;
+        document.getElementById("adx").textContent = `📏 ADX: ${last.adx.toFixed(2)}`;
+        document.getElementById("ema").textContent = `📐 EMA9: ${last.ema9.toFixed(2)} / EMA21: ${last.ema21.toFixed(2)}`;
     
         // Histórico de operações
         const historicoTable = document.querySelector("#historico tbody");
