@@ -94,7 +94,7 @@
   <script>
     async function fetchData() {
       try {
-        const response = await fetch("http://localhost:3000/data"); // Servidor Google Cloud "http://34.39.151.145:3000/data"
+        const response = await fetch("https://bot-binance-v02-production-9f99.up.railway.app/data"); // Servidor Google Cloud "http://34.39.151.145:3000/data"
         const data = await response.json();
     
         console.log("Últimos dados:", data.lastData);
